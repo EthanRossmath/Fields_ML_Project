@@ -1,3 +1,4 @@
+import pandas as pd
 from KMEANSNEW import scan_proc_counts
 df = pd.read_csv("synthetic_iphone_latest.csv")
 
