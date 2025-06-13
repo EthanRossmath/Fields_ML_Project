@@ -7,7 +7,7 @@ import numpy as np
 from sklearn.preprocessing import StandardScaler
 from sklearn.neighbors import LocalOutlierFactor
 
-def detect_outlier_processes(file_path, z_thresh=3, count_thresh=50, contamination=0.01):
+def detect_outlier_processes(df, z_thresh=3, count_thresh=50, contamination=0.01):
     """
     Detects anomalous processes in scan data using Local Outlier Factor.
 
@@ -20,9 +20,7 @@ def detect_outlier_processes(file_path, z_thresh=3, count_thresh=50, contaminati
     Returns:
     - pd.DataFrame: Filtered DataFrame of anomalous processes with high count.
     """
-    # Load data
-    df = pd.read_csv(file_path)
-
+    
     # Count processes per scan
     scan_level_df = (
         df.groupby(['device', 'scan', 'procName'])
