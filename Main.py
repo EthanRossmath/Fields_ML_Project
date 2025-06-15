@@ -7,7 +7,9 @@ df = pd.read_csv("synthetic_iphone_latest.csv")
 
 print(build_scan_proc_counts(df))
 
-detect_outlier_processes(df)
+# Returns a dataframe consisting of devices, scans, process names, and the number of times a process apppears
+# in that scan. Based on Local Outlier Factor algorithm to find outliers in a dataset. 
+detect_outlier_processes(df, count_thresh=50, contamination=0.01)
 
 #Returns a set of anomaly_percentage Devices, based on statistical analysis of procedure count (total - unique)
 #Set create_plots to True, to save graphs for each device in the output_dir.
