@@ -16,3 +16,9 @@ Steps to run the code.
 
     4. Run the file and have fun :)
 
+
+Special Notes:
+    The statistical analysis can output pictures if one sets create_plots=True. The process will take a couple
+    of minutes with this feature switched on. The pictures for the standard data are also offered in the statistics folder
+    stat = analyze_df(df, create_plots=False, output_dir='Statistics',  anomaly_percentage=0.15, verbose=False)
+
