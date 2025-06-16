@@ -8,10 +8,6 @@ from SimpleCounting import filter_high_process_counts
 from Amnesty_Tech_Comparisons.py import detect_fuzzy_matched_processes
 df = pd.read_csv("synthetic_iphone_latest.csv")
 
-# The list of known malicious processes involved in the Pegasus project 
-# made publicly available by Amnesty Tech.
-known_proc_file = "/home/seed/all_processes.txt"
-
 # Compare the processes in our dataframe to the known list of Malicious processes (The threshold is the threshold of the fuzzysearch algorithm)
 proc_matches, device_map = detect_fuzzy_matched_processes(df, known_proc_file, threshold=100)
 
