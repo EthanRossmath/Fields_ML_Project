@@ -27,7 +27,7 @@ DBSCAN_malicious = anomalous_devices_DBSCAN(df)
 
 # Returns a dataframe consisting of devices, scans, process names, and the number of times a process apppears
 # in that scan. Based on Local Outlier Factor algorithm to find outliers in a dataset. 
-lof = lof_outliers(df, count_thresh=50, contamination=0.01)
+lof = lof_outliers(df, count_thresh=30, contamination=0.01)
 lof_device = set(lof['device'].unique())
 lof_process = set(lof['process'].unique())
 
@@ -41,13 +41,13 @@ stat = analyze_df(df, create_plots=False, output_dir='Statistics',  anomaly_perc
 fuzzy_search = detect_anomalous_devices(df, n=8, verbose=False)
 
 
-#### ETHAN HERE: JUST MESSING AROUND, LET ME KNOW WHAT YOU THINK ############
-
-def print_unusual_behaviour(set1, set2, set3, set4):
+# Printing the results of the analysis.
+def print_unusual_behaviour(set0, set1, set2, set3, set4):
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
     END = '\033[0m'
 
+    # formatting the outputs so only 7 items appear per line (for readability)
     def format_set_with_line_breaks(s, max_items_per_line=7):
         if not s:
             return "(None)"
@@ -59,6 +59,8 @@ def print_unusual_behaviour(set1, set2, set3, set4):
         return "\n".join(lines)
 
     output = (
+        f"{BOLD}{UNDERLINE}Devices with rare processes:{END}\n"
+        f"{format_set_with_line_breaks(set0)}\n\n"
         f"{BOLD}{UNDERLINE}Devices that have an unusual number of crashing processes:{END}\n"
         f"{format_set_with_line_breaks(set1)}\n\n"
         f"{BOLD}{UNDERLINE}Processes that crash an unusual number of times:{END}\n"
@@ -71,6 +73,6 @@ def print_unusual_behaviour(set1, set2, set3, set4):
     print(output)
 
 
-print_unusual_behaviour(lof_device, lof_process, stat, fuzzy_search)
+print_unusual_behaviour(kmeans_malicious, lof_device, lof_process, stat, fuzzy_search)
 
 
