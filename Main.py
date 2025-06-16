@@ -3,10 +3,17 @@ from Kmeans_clustering import get_devices_not_in_top_clusters
 from lof_outlier import lof_outliers
 from statistical_analysis import analyze_df
 from fuzzy_search import detect_anomalous_devices
+from DBSCAN import anomalous_devices_DBSCAN
 df = pd.read_csv("synthetic_iphone_latest.csv")
+
+# Counts the number of times a process appears in a (device,scan) pair and lists the processes and the (device,scan) 
+# pair for which it had a count more than $n$. For this data, $n=100$ is more or less optimal.
 
 # Does the Kmeans clustering (10 clusters) and outputs the devices that are not in the top 2 clusters.
 kmeans_malicious = get_devices_not_in_top_clusters(df)
+
+# Does the DBSCAN clustering and outputs the noisy devices.
+DBSCAN_malicious = anomalous_devices_DBSCAN(df)
 
 # Returns a dataframe consisting of devices, scans, process names, and the number of times a process apppears
 # in that scan. Based on Local Outlier Factor algorithm to find outliers in a dataset. 
