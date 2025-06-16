@@ -5,7 +5,7 @@ from statistical_analysis import analyze_df
 from fuzzy_search import detect_anomalous_devices
 from DBSCAN import anomalous_devices_DBSCAN
 from SimpleCounting import filter_high_process_counts
-from AmnestyTech.py import detect_fuzzy_matched_processes
+from Amnesty_Tech_Comparisons.py import detect_fuzzy_matched_processes
 df = pd.read_csv("synthetic_iphone_latest.csv")
 
 # The list of known malicious processes involved in the Pegasus project 
