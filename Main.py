@@ -16,7 +16,7 @@ lof_process = set(lof['process'].unique())
 
 #Returns a set of anomaly_percentage Devices, based on statistical analysis of procedure count (total - unique)
 #Set create_plots to True, to save graphs for each device in the output_dir.
-stat = analyze_df(df, create_plots=False, output_dir='Statistics',  anomaly_percentage=0.15)
+stat = analyze_df(df, create_plots=False, output_dir='Statistics',  anomaly_percentage=0.15, verbose=False)
 
 #Returns a set of n devices that are suspicious depending on a fuzzy search of procName,
 #i.e. if the process name has uncommon special characters or is similar to another procName
