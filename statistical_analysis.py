@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from sklearn.preprocessing import MinMaxScaler
 import ruptures as rpt
 
-def analyze_df(df: pd.DataFrame, create_plots=False, output_dir='Statistics', anomaly_percentage=0.15, verbose=True):
+def analyze_df(df: pd.DataFrame, create_plots=False, output_dir='Statistics', anomaly_percentage=0.15, verbose=False):
     """
     Input:
     df: a dataframe with columns: Device, scan, procName, scan_proc_count, timestamp.
@@ -39,35 +39,62 @@ def analyze_df(df: pd.DataFrame, create_plots=False, output_dir='Statistics', an
     data_no_proc['std_difference_count'] = data_no_proc.groupby('device')['difference_count'].transform('std')
 
     # --- Optional: Generate Plots of difference_count per Device to analyze behavior visually  ---
+
     if create_plots:
         for device_name in sorted(data_no_proc['device'].unique()):
-            result = data_no_proc[data_no_proc['device'] == device_name]
+            result = data_no_proc[data_no_proc['device'] == device_name].copy()
+            result.reset_index(drop=True, inplace=True)  # <--- This fixes the problem!
+
+
             if result.empty:
                 continue
 
-            result['difference_count'] = pd.to_numeric(result['difference_count'])
+            result['difference_count'] = pd.to_numeric(result['difference_count'], errors='coerce')
+            x_axis_col = 'scan'
             y_axis_col = 'difference_count'
+
             mean_value = result[y_axis_col].mean()
 
             plt.figure(figsize=(10, 6))
+
+            # Plot using numeric index to align with ruptures
             plt.plot(result.index, result[y_axis_col], marker='o', label='Difference Count')
+
+            # Plot overall mean as horizontal line
             plt.axhline(y=mean_value, color='red', linestyle='-.', label=f'Mean = {mean_value:.2f}')
 
-            # Detect change points using ruptures according to difference count mean
-            signal = result[y_axis_col].values.reshape(-1, 1)
-            algo = rpt.Pelt(model="l2").fit(signal)
-            change_points = algo.predict(pen=1000)
-            #Compute change points based on the difference count
-            for cp in change_points[:-1]:
-                plt.axvline(x=cp, color='blue', linestyle='--', alpha=0.6,
-                            label='Change Point' if cp == change_points[0] else None)
+            # --- Change Point Detection with ruptures ---
+            signal = result[y_axis_col].dropna().values.reshape(-1, 1)
 
+            try:
+                model = "l2"
+                algo = rpt.Pelt(model=model).fit(signal)
+                penalty = 1000  # Try increasing for less sensitivity
+                change_points = algo.predict(pen=penalty)
+
+                # Plot vertical dashed lines for change points
+                for cp in change_points[:-1]:  # skip the final boundary
+                    if cp < len(result):
+                        scan_label = result.iloc[cp].scan
+                        plt.axvline(x=cp, color='blue', linestyle='--', alpha=0.6,
+                                    label='Change Point' if cp == change_points[0] else None)
+            # Handle exceptions during change point detection in case the data is not suitable
+            except Exception as e:
+                print(f"Skipping ruptures plot for {device_name}: {type(e).__name__} - {e}")
+                plt.close()
+                continue
+
+            # Set custom x-ticks to show scan labels
             plt.xticks(ticks=result.index, labels=result['scan'], rotation=45, ha='right')
+
+            # Formatting
             plt.title(f'Difference Count for {device_name}')
             plt.xlabel('Scan Number')
             plt.ylabel('Difference Count')
             plt.grid(True)
             plt.tight_layout()
+
+            # Deduplicate legend entries
             handles, labels = plt.gca().get_legend_handles_labels()
             by_label = dict(zip(labels, handles))
             plt.legend(by_label.values(), by_label.keys())
