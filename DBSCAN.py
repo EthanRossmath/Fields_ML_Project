@@ -29,7 +29,6 @@ def reduce_dimensionality(X, n_components=10):
     """
     pca = PCA(n_components=n_components, random_state=42)
     X_reduced = pca.fit_transform(X)
-    print(f"PCA explained variance ratio sum: {pca.explained_variance_ratio_.sum():.2f}")
     return X_reduced
 
 def plot_k_distance(X, k=5):
