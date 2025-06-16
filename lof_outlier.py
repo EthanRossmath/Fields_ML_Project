@@ -7,7 +7,7 @@ import numpy as np
 from sklearn.preprocessing import StandardScaler
 from sklearn.neighbors import LocalOutlierFactor
 
-def detect_outlier_processes(df, z_thresh=3, count_thresh=50, contamination=0.01):
+def lof_outliers(df, z_thresh=3, count_thresh=50, contamination=0.01):
     """
     Detects anomalous processes in scan data using Local Outlier Factor.
 
