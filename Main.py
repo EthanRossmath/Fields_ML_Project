@@ -24,13 +24,13 @@ stat = analyze_df(df, create_plots=False, output_dir='Statistics',  anomaly_perc
 fuzzy_search = detect_anomalous_devices(df, n=8, verbose=False)
 
 
-# Printing the 
-
+# Printing the results of the analysis.
 def print_unusual_behaviour(set0, set1, set2, set3, set4):
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
     END = '\033[0m'
 
+    # formatting the outputs so only 7 items appear per line (for readability)
     def format_set_with_line_breaks(s, max_items_per_line=7):
         if not s:
             return "(None)"
