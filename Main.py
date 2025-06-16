@@ -30,9 +30,11 @@ DBSCAN_malicious = anomalous_devices_DBSCAN(df)
 
 # Returns a dataframe consisting of devices, scans, process names, and the number of times a process apppears
 # in that scan. Based on Local Outlier Factor algorithm to find outliers in a dataset. 
-lof = lof_outliers(df, count_thresh=30, contamination=0.01)
+lof = lof_outliers(df, count_thresh=0, contamination=0.01)
 lof_device = set(lof['device'].unique())
-lof_process = set(lof['process'].unique())
+lof_device = set(lof['device'].unique())
+lof_process_df = lof.loc[lof['count_per_scan']>30]
+lof_process = set(lof_process_df['process'])
 
 #Returns a set of anomaly_percentage Devices, based on statistical analysis of procedure count (total - unique)
 #Set create_plots to True, to save graphs for each device in the output_dir.
@@ -62,9 +64,9 @@ def print_unusual_behaviour(set0, set1, set2, set3, set4):
         return "\n".join(lines)
 
     output = (
-        f"{BOLD}{UNDERLINE}Devices with rare processes:{END}\n"
+        f"{BOLD}{UNDERLINE}Devices that have an unusual number of crashing processes KMeans:{END}\n"
         f"{format_set_with_line_breaks(set0)}\n\n"
-        f"{BOLD}{UNDERLINE}Devices that have an unusual number of crashing processes:{END}\n"
+        f"{BOLD}{UNDERLINE}Devices that have an unusual number of crashing processes LOF:{END}\n"
         f"{format_set_with_line_breaks(set1)}\n\n"
         f"{BOLD}{UNDERLINE}Processes that crash an unusual number of times:{END}\n"
         f"{format_set_with_line_breaks(set2)}\n\n"
