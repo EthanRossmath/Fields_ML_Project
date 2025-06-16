@@ -1,5 +1,5 @@
 import pandas as pd
-from KMEANSNEW import build_scan_proc_counts
+from Kmeans_clustering import build_scan_proc_counts
 from lof_outlier import lof_outliers
 from statistical_analysis import analyze_df
 from fuzzy_search import detect_anomalous_devices
