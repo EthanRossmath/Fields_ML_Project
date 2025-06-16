@@ -1,11 +1,12 @@
 import pandas as pd
-from Kmeans_clustering import build_scan_proc_counts
+from Kmeans_clustering import get_devices_not_in_top_clusters
 from lof_outlier import lof_outliers
 from statistical_analysis import analyze_df
 from fuzzy_search import detect_anomalous_devices
 df = pd.read_csv("synthetic_iphone_latest.csv")
 
-kmeans = build_scan_proc_counts(df)
+# Does the Kmeans clustering (10 clusters) and outputs the devices that are not in the top 2 clusters.
+kmeans_malicious = get_devices_not_in_top_clusters(df)
 
 # Returns a dataframe consisting of devices, scans, process names, and the number of times a process apppears
 # in that scan. Based on Local Outlier Factor algorithm to find outliers in a dataset. 
