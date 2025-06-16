@@ -11,7 +11,7 @@ Steps to run the code.
     scan IDs have column title "scan", process names have title "procName", and the counts of
     process running in each scan has column title "scan_proc_count".
 
-    3. Go to Main.py and on line 12, replace synthetic_iphone_latest.csv with the name of you .csv
+    3. Go to Main.py and on line 11, replace synthetic_iphone_latest.csv with the name of you .csv
     file.
 
     4. Run the file and have fun :)
